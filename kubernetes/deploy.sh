@@ -1,7 +1,4 @@
-<<<<<<< HEAD
- 
-=======
- #!/bin/bash
+#!/bin/bash
 
 echo "🚀 Starting deployment of ITI Challenge applications..."
 
@@ -48,4 +45,3 @@ echo ""
 echo "🎉 Deployment finished!"
 echo "📝 Note: It may take 5-10 minutes for the load balancer to be fully ready."
 echo "🌍 Your application will be available at the IP address shown above."
->>>>>>> 2e52279 (Upload Kubernetes Files)
