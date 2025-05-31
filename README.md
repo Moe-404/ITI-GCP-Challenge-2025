@@ -2,6 +2,9 @@
 
 This repository contains the complete infrastructure setup and application deployment for the ITI GCP Challenge 2025. The infrastructure is built using Terraform modules and deploys a secure, private GCP environment.
 
+## Architecture Diagram
+![GKE Cluster](/images/private%20gke%20cluster.jpg)
+
 ## Architecture Overview
 
 The infrastructure includes:
@@ -60,8 +63,8 @@ gcloud services enable iamcredentials.googleapis.com
 
 ```bash
 cd terraform
-cp terraform.tfvars.example terraform.tfvars
-# Edit terraform.tfvars with your project ID
+nano terraform.tfvars
+# Put your values in the tfvars file 
 ```
 
 ### 3. Deploy Infrastructure
@@ -99,8 +102,14 @@ After infrastructure deployment:
    ```bash
    gcloud container clusters get-credentials iti-private-cluster --zone=us-central1-a
    ```
+4. **Apply K8s Files**
+   ```bash
+   cd kubernetes
+   kubectl apply -f redis-deployment.yaml
+   kubectl apply -f python-app-deployment.yaml
+   kubectl apply -f ingress.yaml
 
-4. **Verify deployment:**
+5. **Verify deployment:**
    ```bash
    kubectl get pods
    kubectl get services
@@ -216,30 +225,3 @@ terraform destroy
 ```
 
 **Note**: This will delete all infrastructure including data. Make sure to backup any important data before running destroy.
-
-## Architecture Diagram
-
-```
-Internet
-    |
-[Load Balancer] ←→ [GKE Ingress]
-                       |
-                   [GKE Cluster] (Restricted Subnet - No Internet)
-                       |
-                   [Python App + Redis]
-                       |
-Management Subnet ←→ [Private VM] ←→ [NAT Gateway] ←→ Internet
-    |
-[Artifact Registry] (Private)
-```
-
-## Contributing
-
-1. Follow Terraform best practices
-2. Update documentation for any changes
-3. Test infrastructure changes in a development environment
-4. Use semantic versioning for releases
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.

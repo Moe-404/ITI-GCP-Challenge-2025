@@ -8,32 +8,18 @@ resource "google_service_account" "gke_service_account" {
 # Required roles for GKE nodes
 resource "google_project_iam_member" "gke_worker_node" {
   project = var.project_id
-  role    = "roles/container.nodeServiceAccount"
-  member  = "serviceAccount:${google_service_account.gke_service_account.email}"
-}
+  for_each = toset([
+    "roles/container.nodeServiceAccount",
+    "roles/artifactregistry.reader",
+    "roles/compute.networkAdmin",
+    "roles/compute.storageAdmin",
+    "roles/compute.instanceAdmin.v1",
+    "roles/compute.networkUser",
+    "roles/iam.serviceAccountUser",
+    "roles/storage.objectViewer"
+  ])
 
-resource "google_project_iam_member" "gke_worker_node_logging" {
-  project = var.project_id
-  role    = "roles/logging.logWriter"
-  member  = "serviceAccount:${google_service_account.gke_service_account.email}"
-}
-
-resource "google_project_iam_member" "gke_worker_node_monitoring" {
-  project = var.project_id
-  role    = "roles/monitoring.metricWriter"
-  member  = "serviceAccount:${google_service_account.gke_service_account.email}"
-}
-
-resource "google_project_iam_member" "gke_worker_node_monitoring_viewer" {
-  project = var.project_id
-  role    = "roles/monitoring.viewer"
-  member  = "serviceAccount:${google_service_account.gke_service_account.email}"
-}
-
-# Artifact Registry Reader role for pulling images
-resource "google_project_iam_member" "artifact_registry_reader" {
-  project = var.project_id
-  role    = "roles/artifactregistry.reader"
+  role    = each.value
   member  = "serviceAccount:${google_service_account.gke_service_account.email}"
 }
 
@@ -45,26 +31,18 @@ resource "google_service_account" "vm_service_account" {
 }
 
 # Required roles for management VM
-resource "google_project_iam_member" "vm_compute_viewer" {
+
+resource "google_project_iam_member" "vm_service_account_roles" {
   project = var.project_id
-  role    = "roles/compute.viewer"
+  for_each = toset([
+    "roles/container.developer",
+    "roles/container.clusterAdmin",
+    "roles/artifactregistry.admin",
+    "roles/iam.serviceAccountUser"
+  ])
+
+  role    = each.value
   member  = "serviceAccount:${google_service_account.vm_service_account.email}"
 }
 
-resource "google_project_iam_member" "vm_container_developer" {
-  project = var.project_id
-  role    = "roles/container.developer"
-  member  = "serviceAccount:${google_service_account.vm_service_account.email}"
-}
 
-resource "google_project_iam_member" "vm_artifact_registry_writer" {
-  project = var.project_id
-  role    = "roles/artifactregistry.writer"
-  member  = "serviceAccount:${google_service_account.vm_service_account.email}"
-}
-
-resource "google_project_iam_member" "vm_storage_admin" {
-  project = var.project_id
-  role    = "roles/storage.admin"
-  member  = "serviceAccount:${google_service_account.vm_service_account.email}"
-} 

@@ -13,18 +13,12 @@ resource "google_compute_instance" "management_vm" {
   }
 
   network_interface {
-    network    = var.network_name
-    subnetwork = var.subnet_name
+    subnetwork = google_compute_subnetwork.management.id
     # No external IP - private VM
   }
 
   # IAP access tag
   tags = ["iap-access"]
-
-  # Enable OS Login
-  metadata = {
-    enable-oslogin = "TRUE"
-  }
 
   service_account {
     email  = var.vm_service_account_email
@@ -58,12 +52,4 @@ resource "google_compute_instance" "management_vm" {
     gcloud components install gke-gcloud-auth-plugin
   EOT
 
-  # Enable deletion protection for production
-  deletion_protection = false
-
-  # Labels for organization
-  labels = {
-    environment = "production"
-    purpose     = "management"
-  }
 } 

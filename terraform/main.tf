@@ -104,16 +104,3 @@ module "gke" {
 
   depends_on = [module.network, module.iam]
 }
-
-# Application deployment module
-module "app_deployment" {
-  source = "./modules/app-deployment"
-
-  project_id           = var.project_id
-  region              = var.region
-  cluster_name        = module.gke.cluster_name
-  cluster_location    = var.cluster_location
-  artifact_registry_url = module.artifact_registry.repository_url
-
-  depends_on = [module.gke, module.artifact_registry]
-} 
