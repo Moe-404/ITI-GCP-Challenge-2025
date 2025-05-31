@@ -143,11 +143,6 @@ After infrastructure deployment:
 - Node pool with autoscaling
 - Security and monitoring configurations
 
-### App Deployment Module (`modules/app-deployment/`)
-- Kubernetes deployments for Redis and Python app
-- Services and Ingress configuration
-- Load balancer setup
-
 ## Application Details
 
 The application is a Python Tornado web server that:
@@ -179,41 +174,6 @@ The application is a Python Tornado web server that:
 - Application includes liveness and readiness probes
 - Resource limits set for all containers
 - Structured logging to Google Cloud Logging
-
-## Troubleshooting
-
-### Common Issues
-
-1. **Cannot access GKE cluster from management VM:**
-   - Verify the VM is in the management subnet
-   - Check authorized networks configuration
-   - Ensure proper IAM permissions
-
-2. **Cannot pull images from Artifact Registry:**
-   - Verify Docker is configured for Artifact Registry
-   - Check service account permissions
-   - Ensure image exists in the registry
-
-3. **Application not accessible:**
-   - Check ingress status: `kubectl get ingress`
-   - Verify load balancer creation in GCP Console
-   - Check service endpoints: `kubectl get endpoints`
-
-### Useful Commands
-
-```bash
-# Check cluster status
-kubectl cluster-info
-
-# View pod logs
-kubectl logs -f deployment/python-app
-
-# Check service account
-kubectl get serviceaccounts
-
-# Debug networking
-kubectl exec -it <pod-name> -- nslookup redis
-```
 
 ## Clean Up
 
