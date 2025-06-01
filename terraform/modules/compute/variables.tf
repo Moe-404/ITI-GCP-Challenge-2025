@@ -18,8 +18,8 @@ variable "network_name" {
   type        = string
 }
 
-variable "subnet_name" {
-  description = "Name of the subnet"
+variable "management_subnet_id" {
+  description = "ID of the management subnet"
   type        = string
 }
 

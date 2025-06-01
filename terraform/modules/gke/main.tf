@@ -11,6 +11,9 @@ resource "google_container_cluster" "primary" {
   remove_default_node_pool = true
   initial_node_count       = 1
 
+  # Disable deletion protection to allow cluster destruction
+  deletion_protection = false
+
   # Private cluster configuration
   private_cluster_config {
     enable_private_nodes    = true

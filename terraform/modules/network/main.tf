@@ -96,3 +96,18 @@ resource "google_compute_firewall" "allow_gke_to_management" {
   direction     = "INGRESS"
   priority      = 500
 }
+
+# Allow traffic from management subnet to GKE master
+resource "google_compute_firewall" "allow_management_to_gke_master" {
+  name    = "allow-management-to-gke-master"
+  network = google_compute_network.vpc.name
+
+  allow {
+    protocol = "tcp"
+    ports    = ["443"]
+  }
+
+  source_ranges = [google_compute_subnetwork.management.ip_cidr_range]
+  direction     = "INGRESS"
+  priority      = 1000
+}

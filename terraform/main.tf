@@ -78,7 +78,7 @@ module "compute" {
   zone                     = var.zone
   region                   = var.region
   network_name             = module.network.network_name
-  subnet_name              = module.network.management_subnet_name
+  management_subnet_id     = module.network.management_subnet_id
   vm_machine_type          = var.vm_machine_type
   vm_service_account_email = module.iam.vm_service_account_email
   

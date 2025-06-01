@@ -13,7 +13,7 @@ resource "google_compute_instance" "management_vm" {
   }
 
   network_interface {
-    subnetwork = google_compute_subnetwork.management.id
+    subnetwork = var.management_subnet_id
     # No external IP - private VM
   }
 
